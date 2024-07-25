@@ -4,13 +4,12 @@ def main():
     win = Window(800, 600)
 
     cell = Cell(win)    
-    p1 = Point(50, 50)
-    p2 = Point(55, 55)
-    p3 = Point(100, 50)
-    p4 = Point(150, 100)
+    cell_noright = Cell(win, right=False)
+    cell_nobot = Cell(win, bottom=False) 
 
-    cell.draw(p1, p2)
-    cell.draw(p3, p4)
+    cell.draw(400, 400, 475, 475)
+    cell_noright.draw(100, 50, 150, 100)
+    cell_nobot.draw(375, 275, 425, 325)    
 
     win.wait_for_close()
 
