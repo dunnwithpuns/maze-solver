@@ -40,10 +40,21 @@ class Cell:
             self._win.draw_line(self.bottom_wall)
 
     def draw_move(self, to_cell, undo=False):
-        
-        self.color = "red"
-        if undo:
-            self.color = "gray"
 
-        line = Line(Point(((self._x1 + self._x2) / 2), ((self._y1 + self._y2) / 2)), Point(((to_cell._x1 + to_cell._x2) / 2), ((to_cell._y1 +to_cell._y2) / 2))) 
-        self._win.draw_line(line, fill_color=self.color)
+        x1 = (self._x1 + self._x2) // 2
+        y1 = (self._y1 + self._y2) // 2
+        middle1 = Point(x1, y1)
+
+        x2 = (to_cell._x1 + to_cell._x2) // 2
+        y2 = (to_cell._y1 + to_cell._y2) // 2
+        middle2 = Point(x2, y2)
+        
+        fill_color = "red"
+        if undo:
+            fill_color = "gray"
+
+        line = Line(middle1, middle2) 
+        
+        self._win.draw_line(line, fill_color)
+
+
