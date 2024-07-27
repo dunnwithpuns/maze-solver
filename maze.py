@@ -34,10 +34,20 @@ class Maze:
 
     def _draw_cell(self, i, j):
         
-        if i == 0 and j == 0:
-            x1 = self._x1
-            y1 = self._y1
-            x2 = x1 + self._cell_size_x
-            y2 = y1 + self._cell_size_y
+        for i in range(len(self._cells)):
+            for j in range(i):
+                # 
+                x1 = self._x1
+                if i != 0: 
+                    x1 += i * self._cell_size_x   
+               
+                # 
+                y1 = self._y1
+                if j != 0:
+                    y1 += j * self._cell_size_y
+                
+                x2 = x1 + self._cell_size_x
+                y2 = y1 + self._cell_size_y
 
 
+        
