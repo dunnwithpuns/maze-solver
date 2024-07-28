@@ -1,5 +1,6 @@
 from graphics import Window, Line, Point 
 from cell import Cell
+from maze import Maze
 
 def main():
     win = Window(800, 600)

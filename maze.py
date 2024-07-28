@@ -1,3 +1,4 @@
+import time
 from cell import Cell
 from graphics import Line, Point
 
@@ -36,18 +37,23 @@ class Maze:
         
         for i in range(len(self._cells)):
             for j in range(i):
-                # 
+                # calculate x1 based on current col index (i) and cell size 
                 x1 = self._x1
                 if i != 0: 
                     x1 += i * self._cell_size_x   
                
-                # 
+                # calculate y1 based on current row index (i) and cell size 
                 y1 = self._y1
                 if j != 0:
                     y1 += j * self._cell_size_y
                 
+                # calculate x2 and y2 using x1 and y1 and cell_size
                 x2 = x1 + self._cell_size_x
                 y2 = y1 + self._cell_size_y
 
+                self._cells[i][j].draw(x1, y1, x2, y2)
+                self._animate()
 
-        
+    def _animate(self):
+        self._win.redraw()
+        time.sleep(0.05)
