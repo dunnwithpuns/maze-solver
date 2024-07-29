@@ -1,4 +1,5 @@
 import time
+import random
 from cell import Cell
 from graphics import Line, Point
 
@@ -55,3 +56,25 @@ class Maze:
     def _animate(self):
         self._win.redraw()
         time.sleep(0.01)
+
+    def _break_entrance_and_exit(self):
+        en = self._cells[0][0]
+        ex = self._cells[self._num_cols - 1][self._num_rows - 1]
+        
+        en.has_top_wall = False
+        ex.has_bottom_wall = False
+        
+        x1 = self._x1
+        y1 = self._y1
+        x2 = self._x1 + self._cell_size_x
+        y2 = self._y1 + self._cell_size_y
+
+        en.draw(x1, y1, x2, y2)
+
+        x3 = x1 + ((self._num_cols - 1) * self._cell_size_x)
+        y3 = y1 + ((self._num_rows - 1) * self._cell_size_y)
+        x4 = x3 + self._cell_size_x
+        y4 = y3 + self._cell_size_y
+
+        ex.draw(x3, y3, x4, y4)
+
