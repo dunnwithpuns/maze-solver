@@ -6,13 +6,17 @@ from graphics import Line, Point
 class Maze:
     def __init__(
             self,
-            x1, y1,
-            num_rows, num_cols,
-            cell_size_x, cell_size_y,
+            x1, 
+            y1,
+            num_rows, 
+            num_cols,
+            cell_size_x, 
+            cell_size_y,
             win=None,
             seed=None,
         ):
 
+        self._cells = []
         self._x1 = x1
         self._y1 = y1
         self._num_rows = num_rows
@@ -20,38 +24,32 @@ class Maze:
         self._cell_size_x = cell_size_x
         self._cell_size_y = cell_size_y
         self._win = win
-        self._seed = 0
         if seed:
             self._seed = random.seed(seed)
         
         self._create_cells()
         self._break_entrance_and_exit()
         self._break_walls_r(0, 0)
-        # self._rest_cells_visited()
+        self._reset_cells_visited()
 
     def _create_cells(self):
 
-        self._cells = []
         for i in range(self._num_cols):
             col = []
             for j in range(self._num_rows):
                 col.append(Cell(self._win))
             self._cells.append(col)
 
-        for i in range(len(self._cells)):
-            for j in range(len(col)):
+        for i in range(self._num_cols):
+            for j in range(self._num_rows):
                 self._draw_cell(i, j)
 
     def _draw_cell(self, i, j):
         if self._win is None:
             return
-        # calculate x1 based on current col index (i) and cell size 
-        x1 = self._x1 + i * self._cell_size_x
-       
-        # calculate y1 based on current row index (i) and cell size 
-        y1 = self._y1 + j * self._cell_size_y
         
-        # calculate x2 and y2 using x1 and y1 and cell_size
+        x1 = self._x1 + i * self._cell_size_x
+        y1 = self._y1 + j * self._cell_size_y
         x2 = x1 + self._cell_size_x
         y2 = y1 + self._cell_size_y
 
@@ -80,29 +78,25 @@ class Maze:
             # right
             if i < self._num_rows - 1 and not self._cells[i + 1][j].visited:
                 next_index_list.append((i + 1, j))
-            
             # left
             if i > 0 and not self._cells[i - 1][j].visited:
                 next_index_list.append((i - 1, j))
-            
             # up
             if j > 0 and not self._cells[i][j - 1].visited:
-                next_index_list.append((i, i - 1)) 
-
+                next_index_list.append((i, j - 1)) 
             # down
             if j < self._num_rows - 1 and not self._cells[i][j + 1].visited:
                 next_index_list.append((i, j + 1))
- 
 
-            # if no possible_directions, break out of loop
+            # if no possible_directions 
+            # break out of loop
             if len(next_index_list) == 0:
                 self._draw_cell(i, j)
                 return
            
             # choose random cell 
-            length = len(next_index_list)
-            direction = random.randrange(length)
-            next_index = next_index_list[direction]
+            direction_index = random.randrange(len(next_index_list))
+            next_index = next_index_list[direction_index]
             
             # knock down the walls between current and chosen cell           
             # right
@@ -129,8 +123,8 @@ class Maze:
                         
     def _reset_cells_visited(self):
 
-        for i in range(self._cells):
-            for j in range(i):
+        for i in range(self._num_cols):
+            for j in range(self._num_rows):
                 self._cells[i][j].visited = False
         
        
