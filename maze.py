@@ -100,7 +100,8 @@ class Maze:
                 return
            
             # choose random cell 
-            direction = random.randrange(len(next_index_list))
+            length = len(next_index_list)
+            direction = random.randrange(length)
             next_index = next_index_list[direction]
             
             # knock down the walls between current and chosen cell           
