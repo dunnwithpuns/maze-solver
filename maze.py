@@ -10,6 +10,7 @@ class Maze:
             num_rows, num_cols,
             cell_size_x, cell_size_y,
             win,
+            seed=None,
         ):
 
         self._x1 = x1
@@ -19,8 +20,11 @@ class Maze:
         self._cell_size_x = cell_size_x
         self._cell_size_y = cell_size_y
         self._win = win
+        self._seed = 0
+        if seed:
+            self._seed = random.seed(seed)
         self._create_cells()
-
+        
     def _create_cells(self):
 
         self._cells = []
@@ -77,4 +81,10 @@ class Maze:
         y4 = y3 + self._cell_size_y
 
         ex.draw(x3, y3, x4, y4)
+
+    def _break_walls_r(self, i, j):
+        self._cells[i][j].visited = True
+        #inf loop
+            next_coords = []
+
 
