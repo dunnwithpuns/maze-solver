@@ -62,29 +62,31 @@ class Maze:
         time.sleep(0.01)
 
     def _break_entrance_and_exit(self):
-        en = self._cells[0][0]
-        ex = self._cells[self._num_cols - 1][self._num_rows - 1]
-        
-        en.has_top_wall = False
-        ex.has_bottom_wall = False
-        
-        x1 = self._x1
-        y1 = self._y1
-        x2 = self._x1 + self._cell_size_x
-        y2 = self._y1 + self._cell_size_y
+        self._cells[0][0].has_top_wall = False
+        self._draw_cell(0, 0)
 
-        en.draw(x1, y1, x2, y2)
-
-        x3 = x1 + ((self._num_cols - 1) * self._cell_size_x)
-        y3 = y1 + ((self._num_rows - 1) * self._cell_size_y)
-        x4 = x3 + self._cell_size_x
-        y4 = y3 + self._cell_size_y
-
-        ex.draw(x3, y3, x4, y4)
+        self._cells[self._num_cols - 1][self._num_rows - 1].has_bottom_wall = False
+        self._draw_cell(self._num_cols - 1, self._num_rows - 1)
 
     def _break_walls_r(self, i, j):
         self._cells[i][j].visited = True
-        #inf loop
-            next_coords = []
+        for k in range():
+            possible_dirs = []
+
+            # check if each neighbor has been visited and if so add it to next_coords list 
+            if self._cells[i][j + 1] and self._cell[i][j + 1].visited == False:
+                possible_dirs.append([i, j + 1])
+            if self._cells[i + 1][j] and self._cell[i + 1][j].visited == False:
+                possible_dirs.append([i + 1, j])
+            if self._cells[i - 1][j] and self._cell[i - 1][j].visited == False:
+                possible_dirs.append([i - 1, j])
+            if self._cells[i][j - 1] and self._cell[i][j - 1].visited == False:
+                possible_dirs.append([i, i - 1]) 
+           
+            if len(possible_dirs) == 0:
+                return
+            
+                        
+            
 
 
