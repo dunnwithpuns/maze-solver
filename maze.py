@@ -70,23 +70,58 @@ class Maze:
 
     def _break_walls_r(self, i, j):
         self._cells[i][j].visited = True
-        for k in range():
-            possible_dirs = []
+        while True:
+            possible_directions = []
 
             # check if each neighbor has been visited and if so add it to next_coords list 
-            if self._cells[i][j + 1] and self._cell[i][j + 1].visited == False:
-                possible_dirs.append([i, j + 1])
-            if self._cells[i + 1][j] and self._cell[i + 1][j].visited == False:
-                possible_dirs.append([i + 1, j])
-            if self._cells[i - 1][j] and self._cell[i - 1][j].visited == False:
-                possible_dirs.append([i - 1, j])
-            if self._cells[i][j - 1] and self._cell[i][j - 1].visited == False:
-                possible_dirs.append([i, i - 1]) 
+            # down
+            if j < self._num_rows - 1 and not self._cells[i][j + 1].visited:
+                possible_directions.append((i, j + 1))
+            
+            # right
+            if i < self._num_rows - 1 and not self._cells[i + 1][j].visited:
+                possible_directions.append((i + 1, j))
+            
+            # left
+            if i > 0 and not self._cells[i - 1][j].visited:
+                possible_directions.append((i - 1, j))
+            
+            # up
+            if j > 0 and not self._cells[i][j - 1].visited:
+                possible_directions.append((i, i - 1)) 
            
-            if len(possible_dirs) == 0:
+            # if no possible_directions, break out of loop
+            if len(possible_directions) == 0:
+                self._draw_cell(i, j)
                 return
+           
+            # choose random cell 
+            direction = random.randrange(len(possible_directions))
+            next_index = possible_directions[direction]
             
+            # knock down the walls between current and chosen cell
+            # down
+            if direction == 0:
+                self._cells[i][j].has_bottom_wall = False
+                self._cells[i][j + 1].has_top_wall = False
+            
+            # right
+            if direction == 1:
+                self._cells[i][j].has_right_wall = False
+                self._cells[i + 1][j].has_left_wall = False
+            
+            # left 
+            if direction == 2:
+                self._cells[i][j].has_left_wall = False
+                self._cells[i - 1][j].has_right_wall = False 
+
+            # up
+            if direction == 3:
+                self._cells[i][j].has_top_wall = False
+                self._cells[i][j - 1].has_bottom_wall = False
+
+            self._break_walls_r(next_index[0], next_index[1])
                         
-            
+                        
 
 
