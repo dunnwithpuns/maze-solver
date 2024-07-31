@@ -128,73 +128,80 @@ class Maze:
                 self._cells[i][j].visited = False
         
     def solve(self):
+        print(f"starting to solve {self._num_rows} rows, {self._num_cols} cols")
         return self._solve_r(i=0, j=0)
-
-    def walls_blocking(self, i, j, new_x, new_y):
-        direction = new_x - i, new_y - j
-
-        if (
-            direction == (-1, 0)
-            and not self._cells[i][j].has_left_wall
-            and not self._cells[new_x][new_y].has_right_wall
-        ):
-            return False
-        if (
-            direction == (1, 0)
-            and not self._cells[i][j].has_right_wall
-            and not self._cells[new_x][new_y].has_left_wall
-        ):
-            return False
-        if (
-            direction == (0, -1)
-            and not self._cells[i][j].has_bottom_wall
-            and not self._cells[new_x][new_y].has_top_wall
-        ):
-            return False
-        
-        if (
-            direction == (0, 1)
-            and not self._cells[i][j].has_top_wall
-            and not self._cells[new_x][new_y].has_bottom_wall
-        ):
-            return False
-        
-        return True
-
-
+ 
     def _solve_r(self, i, j):
-        print(f"current cell: ({i}, {j})")
-        self._animate()
-
-        if not (0 <= i < self._num_rows and 0 <= j < self._num_cols):
+        if not (0 <= i < self._num_cols and 0 <= j < self._num_rows):
             print(f"Out of bounds: ({i}, {j})")
             return False
 
+        print(f"visiting cell: ({i}, {j})")
+        self._animate()
+
         self._cells[i][j].visited = True
 
-
         if self._cells[i][j] == self._cells[self._num_cols - 1][self._num_rows - 1]:
+            print("reached the end cell")
             return True
         
         directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
         for direction in directions:
-            d_row, d_col = direction
-            new_x = i + d_row
-            new_y = j + d_col
+            d_i, d_j = direction
+            new_i = i + d_i
+            new_j = j + d_j
 
             if (
-                0 <= new_x < self._num_rows 
-                and 0 <= new_y < self._num_cols 
-                and not self._cells[new_x][new_y].visited 
-                and not self.walls_blocking(i, j, new_x, new_y)
+                0 <= new_i < self._num_cols and 
+                0 <= new_j < self._num_rows and 
+                not self._cells[new_i][new_j].visited and
+                not self.walls_blocking(i, j, new_i, new_j)
             ):
-                print(f"Moving to: ({new_x}, {new_y})")
-                self._cells[i][j].draw_move(self._cells[new_x][new_y])
+                print(f"moving to: {new_i}, {new_j}")
+                self._cells[i][j].draw_move(self._cells[new_i][new_j])
 
-            if self._solve_r(new_x, new_y):
-                return True
+                if self._solve_r(new_i, new_j):
+                    return True
             
-            self._cells[new_x][new_y].draw_move(self._cells[i][j], undo=True)
+                self._cells[new_i][new_j].draw_move(self._cells[i][j], undo=True)
 
         return False
+
+    def walls_blocking(self, i, j, new_i, new_j):
+        direction = new_i - i, new_j - j
+
+        # left
+        if (
+            direction == (-1, 0)
+            and not self._cells[i][j].has_left_wall
+            and not self._cells[new_i][new_j].has_right_wall
+        ):
+            return False
+        
+        # right
+        if (
+            direction == (1, 0)
+            and not self._cells[i][j].has_right_wall
+            and not self._cells[new_i][new_j].has_left_wall
+        ):
+            return False
+        
+        # up
+        if (
+            direction == (0, -1)
+            and not self._cells[i][j].has_top_wall
+            and not self._cells[new_i][new_j].has_bottom_wall
+        ):
+            return False
+        
+        # down
+        if (
+            direction == (0, 1)
+            and not self._cells[i][j].has_bottom_wall
+            and not self._cells[new_i][new_j].has_top_wall
+        ):
+            return False
+        
+        return True
+
