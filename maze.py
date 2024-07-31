@@ -127,8 +127,74 @@ class Maze:
             for j in range(self._num_rows):
                 self._cells[i][j].visited = False
         
-       
+    def solve(self):
+        return self._solve_r(i=0, j=0)
+
+    def walls_blocking(self, i, j, new_x, new_y):
+        direction = new_x - i, new_y - j
+
+        if (
+            direction == (-1, 0)
+            and not self._cells[i][j].has_left_wall
+            and not self._cells[new_x][new_y].has_right_wall
+        ):
+            return False
+        if (
+            direction == (1, 0)
+            and not self._cells[i][j].has_right_wall
+            and not self._cells[new_x][new_y].has_left_wall
+        ):
+            return False
+        if (
+            direction == (0, -1)
+            and not self._cells[i][j].has_bottom_wall
+            and not self._cells[new_x][new_y].has_top_wall
+        ):
+            return False
+        
+        if (
+            direction == (0, 1)
+            and not self._cells[i][j].has_top_wall
+            and not self._cells[new_x][new_y].has_bottom_wall
+        ):
+            return False
+        
+        return True
 
 
+    def _solve_r(self, i, j):
+        print(f"current cell: ({i}, {j})")
+        self._animate()
+
+        if not (0 <= i < self._num_rows and 0 <= j < self._num_cols):
+            print(f"Out of bounds: ({i}, {j})")
+            return False
+
+        self._cells[i][j].visited = True
 
 
+        if self._cells[i][j] == self._cells[self._num_cols - 1][self._num_rows - 1]:
+            return True
+        
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+        for direction in directions:
+            d_row, d_col = direction
+            new_x = i + d_row
+            new_y = j + d_col
+
+            if (
+                0 <= new_x < self._num_rows 
+                and 0 <= new_y < self._num_cols 
+                and not self._cells[new_x][new_y].visited 
+                and not self.walls_blocking(i, j, new_x, new_y)
+            ):
+                print(f"Moving to: ({new_x}, {new_y})")
+                self._cells[i][j].draw_move(self._cells[new_x][new_y])
+
+            if self._solve_r(new_x, new_y):
+                return True
+            
+            self._cells[new_x][new_y].draw_move(self._cells[i][j], undo=True)
+
+        return False

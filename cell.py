@@ -29,12 +29,23 @@ class Cell:
         
         if not self.has_left_wall:
             left_color = "white" 
+        else:
+            left_color = "black"
+
         if not self.has_right_wall:
             right_color = "white"
+        else:
+            right_color = "black"
+
         if not self.has_top_wall:
             top_color = "white"       
+        else:
+            top_color = "black"
+
         if not self.has_bottom_wall:
             bottom_color = "white"
+        else:
+            bottom_color = "black"
  
         self._win.draw_line(self.left_wall, fill_color = left_color)
         self._win.draw_line(self.right_wall, fill_color = right_color)
@@ -53,7 +64,7 @@ class Cell:
         
         fill_color = "red"
         if undo:
-            fill_color = "gray"
+            fill_color = "white"
 
         line = Line(middle1, middle2) 
         
