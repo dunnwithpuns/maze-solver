@@ -60,7 +60,7 @@ class Maze:
         if self._win is None:
             return
         self._win.redraw()
-        time.sleep(0.01)
+        time.sleep(0.05)
 
     def _break_entrance_and_exit(self):
         self._cells[0][0].has_top_wall = False
@@ -75,12 +75,12 @@ class Maze:
             next_index_list = []
 
             # check if each neighbor has been visited and if so add it to next_coords list 
-            # right
-            if i < self._num_rows - 1 and not self._cells[i + 1][j].visited:
-                next_index_list.append((i + 1, j))
             # left
             if i > 0 and not self._cells[i - 1][j].visited:
                 next_index_list.append((i - 1, j))
+            # right
+            if i < self._num_cols - 1 and not self._cells[i + 1][j].visited:
+                next_index_list.append((i + 1, j)) 
             # up
             if j > 0 and not self._cells[i][j - 1].visited:
                 next_index_list.append((i, j - 1)) 
@@ -109,16 +109,16 @@ class Maze:
                 self._cells[i][j].has_left_wall = False
                 self._cells[i - 1][j].has_right_wall = False 
 
-            # up
-            if next_index[0] == j - 1:
-                self._cells[i][j].has_top_wall = False
-                self._cells[i][j - 1].has_bottom_wall = False
-
             # down
-            if next_index[0] == j + 1:
+            if next_index[1] == j + 1:
                 self._cells[i][j].has_bottom_wall = False
                 self._cells[i][j + 1].has_top_wall = False
  
+            # up
+            if next_index[1] == j - 1:
+                self._cells[i][j].has_top_wall = False
+                self._cells[i][j - 1].has_bottom_wall = False
+
             self._break_walls_r(next_index[0], next_index[1])
                         
     def _reset_cells_visited(self):
